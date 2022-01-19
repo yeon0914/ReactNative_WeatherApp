@@ -11,6 +11,7 @@ export default function App() {
   const [ok, setOk] = useState(true);
 
   const API_KEY = "USER_API_KEY";
+<<<<<<< HEAD
 
   const icons = {
     Clouds: "cloudy",
@@ -21,6 +22,8 @@ export default function App() {
     Drizzle: "rain",
     Thunderstorm: "ligntning",
   }
+=======
+>>>>>>> 6d296f0a439bd93ffe070b5332c9850c1d80cff7
 
   const getWeather = async () => {
     const { permission:granted } = await Location.requestForegroundPermissionsAsync();
@@ -28,7 +31,11 @@ export default function App() {
       setOk(false);
     }
     const { coords: { latitude, longitude } } = await Location.getCurrentPositionAsync({ accuracy: 5 });
+<<<<<<< HEAD
     Location.setGoogleApiKey("USER_API_KEY");
+=======
+    Location.setGoogleApiKey("USER_API_KEY);
+>>>>>>> 6d296f0a439bd93ffe070b5332c9850c1d80cff7
     const location = await Location.reverseGeocodeAsync({ latitude, longitude }, { useGoogleMaps: false })
     setCity(location[0].city);
     const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=ALERTS&appid=${API_KEY}&units=metric`);
