@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import * as Location from 'expo-location';
-import { View, StyleSheet, Text, ScrollView,Dimensions, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Text, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
+import { Fontisto } from '@expo/vector-icons';
 
 const {width:SCREEN_WIDTH} = Dimensions.get("window")
 
@@ -9,7 +10,17 @@ export default function App() {
   const [days, setDays] = useState([]);
   const [ok, setOk] = useState(true);
 
-  const API_KEY = "903d5086ce432391f1c163077ba817a2";
+  const API_KEY = "USER_API_KEY";
+
+  const icons = {
+    Clouds: "cloudy",
+    Clear: "day-sunny",
+    Atmosphere: "",
+    Snow: "snow",
+    Rain: "rains",
+    Drizzle: "rain",
+    Thunderstorm: "ligntning",
+  }
 
   const getWeather = async () => {
     const { permission:granted } = await Location.requestForegroundPermissionsAsync();
@@ -17,7 +28,7 @@ export default function App() {
       setOk(false);
     }
     const { coords: { latitude, longitude } } = await Location.getCurrentPositionAsync({ accuracy: 5 });
-    Location.setGoogleApiKey("AIzaSyDts0opcwiyKdRs_9zVgFwd78knK8a9aQI");
+    Location.setGoogleApiKey("USER_API_KEY");
     const location = await Location.reverseGeocodeAsync({ latitude, longitude }, { useGoogleMaps: false })
     setCity(location[0].city);
     const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=ALERTS&appid=${API_KEY}&units=metric`);
@@ -36,13 +47,16 @@ export default function App() {
       </View>
       <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false} contentContainerStyle={styles.weather}>
         {days.length === 0 ?
-          <View style={styles.day}>
+          <View style={{ ...styles.day, alignItems: "center" }}>
             <ActivityIndicator color="black" size="large" style={{ marginTop: 10 }}></ActivityIndicator>
           </View> :
           days.map((day, index) =>
             <View style={styles.day}>
-              <Text style={styles.date}>{new Date(day.dt*1000).toString().substring(0,10)}</Text>
-              <Text style={styles.temp}>{parseFloat(day.temp.day).toFixed(1)}</Text>
+              <Text style={styles.date}>{new Date(day.dt * 1000).toString().substring(0, 10)}</Text>
+              <View style={{flexDirection:"row", alignItems:"center", justifyContent:"space-between", width: "100%"}}>
+                <Text style={styles.temp}>{parseFloat(day.temp.day).toFixed(1)}</Text>
+                <Fontisto name={icons[day.weather[0].main]} size={68} color="black"></Fontisto>
+              </View>
               <Text style={styles.description}>{day.weather[0].main}</Text>
               <Text style={styles.tinyText}>{day.weather[0].description}</Text>
             </View>)
@@ -71,18 +85,18 @@ const styles = StyleSheet.create({
   },
   day: {
     width: SCREEN_WIDTH,
-    alignItems:"center"
+    paddingLeft: 20,
+    paddingRight: 20
   },
   date: {
     fontSize: 20
   },
   temp: {
-    fontSize: 178,
+    fontSize: 108,
     fontWeight: "600"
   },
   description: {
-    marginTop: -30,
-    fontSize: 58,
+    fontSize: 28,
     fontWeight: "500"
   },
   tinyText: {
