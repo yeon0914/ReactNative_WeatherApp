@@ -9,7 +9,7 @@ export default function App() {
   const [days, setDays] = useState([]);
   const [ok, setOk] = useState(true);
 
-  const API_KEY = "903d5086ce432391f1c163077ba817a2";
+  const API_KEY = "USER_API_KEY";
 
   const getWeather = async () => {
     const { permission:granted } = await Location.requestForegroundPermissionsAsync();
@@ -17,7 +17,7 @@ export default function App() {
       setOk(false);
     }
     const { coords: { latitude, longitude } } = await Location.getCurrentPositionAsync({ accuracy: 5 });
-    Location.setGoogleApiKey("AIzaSyDts0opcwiyKdRs_9zVgFwd78knK8a9aQI");
+    Location.setGoogleApiKey("USER_API_KEY);
     const location = await Location.reverseGeocodeAsync({ latitude, longitude }, { useGoogleMaps: false })
     setCity(location[0].city);
     const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=ALERTS&appid=${API_KEY}&units=metric`);
